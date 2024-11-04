@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "podcast-maker"
+version = "0.1.0"
+description = ""
+authors = ["pu-of-parari"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+openai = "^1.44.1"
+streamlit = "^1.38.0"
+beautifulsoup4 = "^4.12.3"
+pydub = "^0.25.1"
+tqdm = "^4.66.5"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
