@@ -14,8 +14,9 @@ def get_contents_from_url(url: str = "", output_file: str = "output.txt"):
 
     title = soup.find("h1", class_="entry-title")
     if not title:
+        title = soup.find("h1", class_="radar-post-page-head")
+    if not title:
         title = soup.find("h1")
-
     if title:
         title_text = title.get_text(strip=True)
         # タイトル要素を削除して重複を防ぐ
@@ -26,6 +27,7 @@ def get_contents_from_url(url: str = "", output_file: str = "output.txt"):
 
     markdown_content = f"# {title_text}\n\n"
     content_classes = [
+        "div.post-radar-content p",
         "article-content",
         "post-content",
         "entry-content",
@@ -38,10 +40,9 @@ def get_contents_from_url(url: str = "", output_file: str = "output.txt"):
     ]
     article = None
     for class_name in content_classes:
-        article = soup.find(class_=class_name)
+        article = soup.select(class_name)  # 該当するクラスの複数の要素を取得
         if article:
             break
-
     if not article:
         article = soup.find("article")
     if not article:
@@ -54,8 +55,7 @@ def get_contents_from_url(url: str = "", output_file: str = "output.txt"):
 
     added_texts = set()
     if isinstance(article, list):
-        for element in article:
-            markdown_content += parse_element_to_markdown(element, added_texts)
+        markdown_content = "\n".join([p.get_text(strip=True) for p in article])
     elif article:
         markdown_content += parse_element_to_markdown(article, added_texts)
     else:
